@@ -1,0 +1,23 @@
+cat > .gitignore << 'EOF'
+# Secrets — never commit these
+*.env
+.env
+secrets.*
+credentials.*
+*.key
+config_local.*
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Large/binary build outputs (optional — remove if you want to track them)
+*.stl
+*.zip
+EOF
