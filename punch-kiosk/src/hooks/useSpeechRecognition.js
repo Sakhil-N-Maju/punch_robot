@@ -15,6 +15,12 @@ export function useSpeechRecognition({ onResult } = {}) {
   const [listening, setListening] = useState(false);
   const recognitionRef = useRef(null);
 
+  // Callers pass inline arrows for onResult; keeping it in a ref (instead of
+  // in the effect deps) stops the recognizer being torn down and recreated on
+  // every render — which could abort a capture mid-sentence.
+  const onResultRef = useRef(onResult);
+  useEffect(() => { onResultRef.current = onResult; });
+
   useEffect(() => {
     if (!isSupported) return;
     const recognition = new RecognitionClass();
@@ -24,14 +30,15 @@ export function useSpeechRecognition({ onResult } = {}) {
 
     recognition.onresult = (event) => {
       const transcript = event.results[0]?.[0]?.transcript ?? '';
-      onResult && onResult(transcript);
+      onResultRef.current && onResultRef.current(transcript);
     };
     recognition.onend = () => setListening(false);
     recognition.onerror = () => setListening(false);
 
     recognitionRef.current = recognition;
     return () => recognition.abort();
-  }, [isSupported, onResult]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSupported]);
 
   const start = useCallback(() => {
     if (!recognitionRef.current || listening) return;

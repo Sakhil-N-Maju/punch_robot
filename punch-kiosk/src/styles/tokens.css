@@ -9,7 +9,11 @@
   /* Text */
   --punch-text: #0A0A0A;
   --punch-text-secondary: #525252;
-  --punch-text-muted: #A3A3A3;
+  /* Muted text: darkened from #A3A3A3 (2.5:1, failed AA) to 4.6:1 on white. */
+  --punch-text-muted: #737373;
+  /* Turquoise usable AS TEXT on white/soft surfaces (5.5:1). #14B8A6 is
+     background/graphic-only — it fails AA as text. */
+  --punch-turquoise-text: #0F766E;
 
   /* Lines / borders */
   --punch-border: #E5E5E5;
@@ -29,7 +33,9 @@
   --punch-dot-inactive: #D4D4D4;
 
   --punch-gradient-turquoise: linear-gradient(135deg, #2DD4BF, #0D9488);
-  --punch-gradient-user-bubble: linear-gradient(135deg, #14B8A6, #0D9488);
+  /* Deep gradients: surfaces that carry white icons (>=3:1) or white text (>=4.5:1). */
+  --punch-gradient-deep: linear-gradient(135deg, #0D9488, #0F766E);
+  --punch-gradient-user-bubble: linear-gradient(135deg, #0F766E, #115E59);
   --punch-gradient-avatar: linear-gradient(135deg, #F0FDFA, #CCFBF1);
   --punch-gradient-empty-icon: linear-gradient(135deg, #F0FDFA, #ECFEFF);
   --punch-gradient-divider: linear-gradient(90deg, transparent, #E5E5E5, transparent);

@@ -5,14 +5,23 @@ import { Icon } from '../../../components/core/Icon.jsx';
 import { programs, facultyDirectory, departmentDetails } from '../../../data/asietContent.js';
 
 function DeptChip({ label, active, onClick }) {
+  const [press, setPress] = React.useState(false);
   return (
-    <button onClick={onClick} style={{
-      padding: '10px 18px', borderRadius: 999, border: `1px solid ${active ? 'transparent' : '#E5E5E5'}`,
-      background: active ? '#14B8A6' : '#FFFFFF', color: active ? '#FFFFFF' : '#525252',
-      fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 14, fontWeight: 600, cursor: 'pointer',
-      boxShadow: active ? '0 4px 14px rgba(20,184,166,0.3)' : '0 2px 8px rgba(0,0,0,0.05)',
-      transition: 'all 0.18s ease',
-    }}>{label}</button>
+    <button
+      onClick={onClick}
+      onPointerDown={() => setPress(true)}
+      onPointerUp={() => setPress(false)}
+      onPointerCancel={() => setPress(false)}
+      onPointerLeave={() => setPress(false)}
+      style={{
+        // minHeight 44 (touch target); active bg #0F766E keeps white 14px text AA.
+        padding: '12px 20px', minHeight: 44, borderRadius: 999, border: `1px solid ${active ? 'transparent' : '#E5E5E5'}`,
+        background: active ? '#0F766E' : press ? '#F0FDFA' : '#FFFFFF', color: active ? '#FFFFFF' : '#525252',
+        fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 14, fontWeight: 600, cursor: 'pointer',
+        boxShadow: active ? '0 4px 14px rgba(20,184,166,0.3)' : '0 2px 8px rgba(0,0,0,0.05)',
+        transform: press ? 'scale(0.96)' : 'scale(1)',
+        transition: 'all 0.18s ease',
+      }}>{label}</button>
   );
 }
 
@@ -48,7 +57,7 @@ export function AcademicsPanel({ onBack, onAskPunch }) {
         {programs.phd.map((p) => (
           <span key={p} style={{
             padding: '10px 18px', background: '#F0FDFA', border: '1px solid transparent', borderRadius: 999,
-            fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 14, fontWeight: 500, color: '#0D9488',
+            fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 14, fontWeight: 500, color: '#0F766E',
           }}>{p}</span>
         ))}
       </div>
@@ -76,7 +85,7 @@ export function AcademicsPanel({ onBack, onAskPunch }) {
             </span>
             <div>
               <div style={{ fontFamily: "'Sora', sans-serif", fontSize: 17, fontWeight: 700, color: '#0A0A0A' }}>{dept.hod}</div>
-              <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 14, color: '#0D9488', marginTop: 2 }}>Head of Department · {dept.name}</div>
+              <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 14, color: '#0F766E', marginTop: 2 }}>Head of Department · {dept.name}</div>
             </div>
           </div>
 
@@ -87,7 +96,7 @@ export function AcademicsPanel({ onBack, onAskPunch }) {
                 padding: '14px 18px', background: '#FFFFFF', border: '1px solid #E5E5E5', borderRadius: 14,
               }}>
                 <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 15, fontWeight: 600, color: '#0A0A0A' }}>{m.name}</span>
-                <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 13, color: '#A3A3A3', textAlign: 'right' }}>{m.designation}</span>
+                <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 13, color: '#737373', textAlign: 'right' }}>{m.designation}</span>
               </div>
             ))}
           </div>

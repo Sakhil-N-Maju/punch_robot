@@ -16,7 +16,8 @@ export function AssistantBar({ value, onChange, onFocus, onSubmit, onMic }) {
       position: 'relative', zIndex: 2,
     }}>
       <div style={{ width: 220, flex: 'none' }}>
-        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 800, letterSpacing: '2.5px', color: '#14B8A6' }}>PUNCH</div>
+        {/* #0F766E: 11px label needs AA contrast; brand #14B8A6 is 2.5:1 on white */}
+        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 800, letterSpacing: '2.5px', color: '#0F766E' }}>PUNCH</div>
         <div style={{ fontFamily: "'Sora', sans-serif", fontSize: 20, fontWeight: 600, color: '#0A0A0A', margin: '4px 0 6px' }}>Your AI Receptionist</div>
         <StatusDot label="Ready to help" />
       </div>

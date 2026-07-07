@@ -13,7 +13,7 @@ const QUICK_CARDS = [
 export function QuickAccess({ onOpenPanel }) {
   return (
     <section style={{ height: 660, flex: 'none', padding: '32px 56px', position: 'relative', zIndex: 1 }}>
-      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 700, letterSpacing: '2px', color: '#A3A3A3', marginBottom: 20 }}>QUICK ACCESS</div>
+      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 700, letterSpacing: '2px', color: '#737373', marginBottom: 20 }}>QUICK ACCESS</div>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridTemplateRows: '1fr 1fr', gap: 16, height: 540 }}>
         {QUICK_CARDS.map((c) => (
           <QuickAccessCard key={c.title} title={c.title} body={c.body} icon={c.icon} tag={c.tag}

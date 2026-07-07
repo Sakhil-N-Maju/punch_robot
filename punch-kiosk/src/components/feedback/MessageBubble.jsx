@@ -31,7 +31,9 @@ export function MessageBubble({ role = 'punch', text, typing = false, style = {}
 
   const userBubble = {
     ...bubbleBase,
-    background: 'linear-gradient(135deg, #14B8A6, #0D9488)',
+    // Deep teal gradient: white 17px text needs >=4.5:1; the old
+    // #14B8A6 light end was ~2.5:1.
+    background: 'linear-gradient(135deg, #0F766E, #115E59)',
     color: '#FFFFFF',
     borderRadius: '20px 20px 4px 20px',
     padding: '16px 22px',

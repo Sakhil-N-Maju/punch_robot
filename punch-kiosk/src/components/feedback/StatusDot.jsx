@@ -4,7 +4,7 @@ import React from 'react';
  * StatusDot — a small turquoise dot (the "online / ready" indicator) with the
  * dotPulse animation, optionally followed by a label.
  */
-export function StatusDot({ label, size = 8, labelColor = '#A3A3A3', style = {} }) {
+export function StatusDot({ label, size = 8, labelColor = '#737373', style = {} }) {
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, ...style }}>
       <span

@@ -27,20 +27,21 @@ export function Button({
 
   const variants = {
     primary: {
-      background: 'linear-gradient(135deg, #2DD4BF, #0D9488)',
+      // Deep gradient so white label text holds >=4.5:1 across the surface.
+      background: 'linear-gradient(135deg, #0F766E, #115E59)',
       color: '#FFFFFF',
       border: '1.5px solid transparent',
       boxShadow: hover ? '0 8px 28px rgba(20,184,166,0.30)' : '0 4px 16px rgba(20,184,166,0.20)',
     },
     secondary: {
       background: hover ? '#F0FDFA' : '#FFFFFF',
-      color: hover ? '#0D9488' : '#0A0A0A',
+      color: hover ? '#0F766E' :'#0A0A0A',
       border: `1.5px solid ${hover ? '#99F6E4' : '#E5E5E5'}`,
       boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
     },
     ghost: {
       background: hover ? '#F0FDFA' : 'transparent',
-      color: hover ? '#0D9488' : '#525252',
+      color: hover ? '#0F766E' :'#525252',
       border: '1.5px solid transparent',
       boxShadow: 'none',
     },
@@ -51,8 +52,9 @@ export function Button({
       onClick={disabled ? undefined : onClick}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => { setHover(false); setPress(false); }}
-      onMouseDown={() => setPress(true)}
-      onMouseUp={() => setPress(false)}
+      onPointerDown={() => setPress(true)}
+      onPointerUp={() => setPress(false)}
+      onPointerCancel={() => setPress(false)}
       disabled={disabled}
       style={{
         display: 'inline-flex',

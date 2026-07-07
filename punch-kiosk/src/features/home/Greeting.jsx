@@ -18,7 +18,7 @@ export function Greeting({ onOpenPanel, now }) {
   return (
     <section style={{ height: 340, flex: 'none', padding: '40px 56px', position: 'relative', zIndex: 1, overflow: 'hidden' }}>
       <div style={{ position: 'relative', zIndex: 1 }}>
-        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 700, letterSpacing: '2px', color: '#A3A3A3' }}>HELLO THERE</div>
+        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 700, letterSpacing: '2px', color: '#737373' }}>HELLO THERE</div>
         <h1 style={{ fontFamily: "'Sora', sans-serif", fontSize: 52, fontWeight: 800, letterSpacing: '-1.5px', color: '#0A0A0A', margin: '8px 0 4px' }}>
           {greetingForHour(now.getHours())}
         </h1>

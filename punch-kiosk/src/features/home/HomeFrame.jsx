@@ -6,13 +6,16 @@ import { QuickAccess } from './QuickAccess.jsx';
 import { Carousel } from './Carousel.jsx';
 import { AssistantBar } from './AssistantBar.jsx';
 import { OnScreenKeyboard } from '../chat/OnScreenKeyboard.jsx';
+import { useClock } from '../../hooks/useClock.js';
 
 /**
  * HomeFrame — Frame A. The default kiosk state: 5 stacked zones filling
  * 1080x1920 (192 + 340 + 660 + 536 + 192).
  */
 export function HomeFrame({ onOpenPanel, onOpenChat }) {
-  const [now] = React.useState(() => new Date());
+  // Live clock (minute ticks) — a kiosk booted in the morning must not still
+  // say "Good Morning" in the evening, so `now` can't be frozen at mount.
+  const { now } = useClock();
   const [searchValue, setSearchValue] = React.useState('');
   const [keyboardOpen, setKeyboardOpen] = React.useState(false);
 

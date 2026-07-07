@@ -20,7 +20,7 @@ export function Header() {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, width: 200 }}>
         <img src="/assets/asiet-logo.jpg" width="68" height="68" alt="ASIET"
           style={{ objectFit: 'contain', borderRadius: 18 }} />
-        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#A3A3A3' }}>Est. 2001</span>
+        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#737373' }}>Est. 2001</span>
       </div>
 
       <div style={{ textAlign: 'center', flex: 1, maxWidth: 560 }}>
@@ -28,10 +28,10 @@ export function Header() {
           ADI SHANKARA INSTITUTE OF ENGINEERING AND TECHNOLOGY
         </div>
         <div style={{ width: 200, height: 1, background: '#E5E5E5', margin: '8px auto' }} />
-        <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 12, color: '#A3A3A3' }}>
+        <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 12, color: '#737373' }}>
           Approved by AICTE · Affiliated to APJ Abdul Kalam Technological University (KTU)
         </div>
-        <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 11, color: '#A3A3A3', marginTop: 4 }}>
+        <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 11, color: '#737373', marginTop: 4 }}>
           NBA Accredited · NAAC 'A' Grade · Kalady, Kerala
         </div>
       </div>

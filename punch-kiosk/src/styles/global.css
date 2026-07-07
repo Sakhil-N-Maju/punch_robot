@@ -19,7 +19,14 @@ button, input {
 
 button {
   -webkit-tap-highlight-color: transparent;
+  /* Kill double-tap-zoom delay so press feedback is instant on the touchscreen. */
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
+
+/* Placeholder text was browser-default grey (~2.8:1); pin to AA-passing muted. */
+::placeholder { color: #737373; opacity: 1; }
 
 ::-webkit-scrollbar { width: 0; height: 0; }
 
@@ -48,3 +55,4 @@ button {
   position: absolute;
   inset: 0;
 }
+

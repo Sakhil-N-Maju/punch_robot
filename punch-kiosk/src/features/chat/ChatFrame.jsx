@@ -17,7 +17,8 @@ function ChatHeader({ onBack }) {
       height: 120, flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       padding: '0 40px', borderBottom: '1px solid #E5E5E5', background: '#FFFFFF', zIndex: 2,
     }}>
-      <button onClick={onBack} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', cursor: 'pointer', padding: 8 }}>
+      {/* minHeight 48: comfortably above the 44px touch-target floor */}
+      <button onClick={onBack} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', cursor: 'pointer', padding: '12px 16px 12px 8px', minHeight: 48, borderRadius: 12 }}>
         <Icon name="arrow-left" size={22} color="#525252" />
         <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 16, fontWeight: 500, color: '#525252' }}>Back</span>
       </button>
@@ -27,7 +28,7 @@ function ChatHeader({ onBack }) {
         </span>
         <div>
           <div style={{ fontFamily: "'Sora', sans-serif", fontSize: 22, fontWeight: 700, color: '#0A0A0A' }}>Ask Punch</div>
-          <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 13, color: '#A3A3A3' }}>AI Receptionist · ASIET, Kalady</div>
+          <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 13, color: '#737373' }}>AI Receptionist · ASIET, Kalady</div>
         </div>
       </div>
       <Tag variant="turquoise" style={{ borderRadius: 8 }}>AI</Tag>

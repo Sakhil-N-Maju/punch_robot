@@ -7,18 +7,21 @@ import { Icon } from './Icon.jsx';
  */
 export function IconButton({ icon, variant = 'solid', size = 64, active = true, pulse = false, onClick, ariaLabel, style = {} }) {
   const [hover, setHover] = React.useState(false);
+  const [press, setPress] = React.useState(false);
 
   const solid = {
-    background: active ? 'linear-gradient(135deg, #2DD4BF, #0D9488)' : '#E5E5E5',
-    color: active ? '#FFFFFF' : '#A3A3A3',
+    // Deep gradient: the white glyph needs >=3:1 against the whole surface;
+    // the old #2DD4BF light end was ~1.8:1.
+    background: active ? 'linear-gradient(135deg, #0D9488, #0F766E)' : '#E5E5E5',
+    color: active ? '#FFFFFF' : '#737373',
     boxShadow: active ? '0 4px 20px rgba(20,184,166,0.45)' : 'none',
     border: 'none',
   };
   const flat = {
-    background: hover ? '#F0FDFA' : '#FFFFFF',
-    color: hover ? '#0D9488' : '#525252',
+    background: hover || press ? '#F0FDFA' : '#FFFFFF',
+    color: hover || press ? '#0F766E' : '#525252',
     boxShadow: 'none',
-    border: `1px solid ${hover ? '#99F6E4' : '#E5E5E5'}`,
+    border: `1px solid ${hover || press ? '#99F6E4' : '#E5E5E5'}`,
   };
   const v = variant === 'solid' ? solid : flat;
 
@@ -27,7 +30,10 @@ export function IconButton({ icon, variant = 'solid', size = 64, active = true, 
       onClick={onClick}
       aria-label={ariaLabel}
       onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
+      onMouseLeave={() => { setHover(false); setPress(false); }}
+      onPointerDown={() => setPress(true)}
+      onPointerUp={() => setPress(false)}
+      onPointerCancel={() => setPress(false)}
       style={{
         position: 'relative',
         display: 'inline-flex',
@@ -37,7 +43,7 @@ export function IconButton({ icon, variant = 'solid', size = 64, active = true, 
         height: size,
         borderRadius: '50%',
         cursor: 'pointer',
-        transform: hover ? 'scale(1.06)' : 'scale(1)',
+        transform: press ? 'scale(0.94)' : hover ? 'scale(1.06)' : 'scale(1)',
         transition: 'all 0.2s cubic-bezier(0.4,0,0.2,1)',
         ...v,
         ...style,

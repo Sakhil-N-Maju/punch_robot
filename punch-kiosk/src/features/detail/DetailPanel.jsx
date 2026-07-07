@@ -17,7 +17,8 @@ export function DetailPanel({ title, subtitle, icon, onBack, onAskPunch, childre
         height: 144, flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 40px', borderBottom: '1px solid #E5E5E5', background: '#FFFFFF', zIndex: 2,
       }}>
-        <button onClick={onBack} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', cursor: 'pointer', padding: 8 }}>
+        {/* minHeight 48: comfortably above the 44px touch-target floor */}
+        <button onClick={onBack} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'none', border: 'none', cursor: 'pointer', padding: '12px 16px 12px 8px', minHeight: 48, borderRadius: 12 }}>
           <Icon name="arrow-left" size={22} color="#525252" />
           <span style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 16, fontWeight: 500, color: '#525252' }}>Home</span>
         </button>
@@ -27,11 +28,12 @@ export function DetailPanel({ title, subtitle, icon, onBack, onAskPunch, childre
           </span>
           <div>
             <div style={{ fontFamily: "'Sora', sans-serif", fontSize: 24, fontWeight: 700, color: '#0A0A0A' }}>{title}</div>
-            {subtitle && <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 13, color: '#A3A3A3' }}>{subtitle}</div>}
+            {subtitle && <div style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: 13, color: '#737373' }}>{subtitle}</div>}
           </div>
         </div>
-        <button onClick={onAskPunch} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-          <Tag variant="turquoise" icon={<Icon name="sparkles" size={13} color="#0D9488" />}>Ask Punch</Tag>
+        {/* Padded to a >=44px hit area — the bare Tag was ~30px tall */}
+        <button onClick={onAskPunch} style={{ display: 'inline-flex', alignItems: 'center', background: 'none', border: 'none', cursor: 'pointer', padding: '8px 0 8px 12px', minHeight: 48 }}>
+          <Tag variant="turquoise" icon={<Icon name="sparkles" size={13} color="#0F766E" />} style={{ padding: '10px 16px' }}>Ask Punch</Tag>
         </button>
       </header>
 
@@ -44,7 +46,7 @@ export function DetailPanel({ title, subtitle, icon, onBack, onAskPunch, childre
 
 export function SectionLabel({ children }) {
   return (
-    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 700, letterSpacing: '2px', color: '#A3A3A3', marginBottom: 16, marginTop: 40 }}>
+    <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 700, letterSpacing: '2px', color: '#737373', marginBottom: 16, marginTop: 40 }}>
       {children}
     </div>
   );
