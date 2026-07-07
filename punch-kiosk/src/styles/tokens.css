@@ -1,0 +1,134 @@
+/* Punch Kiosk — design tokens (ported from the ASIET Design System) */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap');
+
+:root {
+  /* Base surfaces */
+  --punch-bg: #FFFFFF;
+  --punch-surface: #FFFFFF;
+
+  /* Text */
+  --punch-text: #0A0A0A;
+  --punch-text-secondary: #525252;
+  --punch-text-muted: #A3A3A3;
+
+  /* Lines / borders */
+  --punch-border: #E5E5E5;
+  --punch-border-light: #F2F2F2;
+
+  /* Turquoise — single primary accent */
+  --punch-turquoise: #14B8A6;
+  --punch-turquoise-deep: #0D9488;
+  --punch-turquoise-bright: #2DD4BF;
+  --punch-turquoise-soft: #F0FDFA;
+  --punch-turquoise-tint: #CCFBF1;
+  --punch-turquoise-ring: #99F6E4;
+
+  --punch-online: #14B8A6;
+
+  --punch-fill-neutral: #FAFAFA;
+  --punch-dot-inactive: #D4D4D4;
+
+  --punch-gradient-turquoise: linear-gradient(135deg, #2DD4BF, #0D9488);
+  --punch-gradient-user-bubble: linear-gradient(135deg, #14B8A6, #0D9488);
+  --punch-gradient-avatar: linear-gradient(135deg, #F0FDFA, #CCFBF1);
+  --punch-gradient-empty-icon: linear-gradient(135deg, #F0FDFA, #ECFEFF);
+  --punch-gradient-divider: linear-gradient(90deg, transparent, #E5E5E5, transparent);
+
+  /* Fonts */
+  --punch-font-display: 'Sora', system-ui, sans-serif;
+  --punch-font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --punch-font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Radii */
+  --punch-radius-card: 24px;
+  --punch-radius-panel: 28px;
+  --punch-radius-button: 16px;
+  --punch-radius-pill: 999px;
+  --punch-radius-icon: 14px;
+  --punch-radius-logo: 18px;
+
+  /* Shadows */
+  --punch-shadow-card: 0 2px 8px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.02);
+  --punch-shadow-card-hover: 0 8px 28px rgba(20,184,166,0.14), 0 0 0 1px #99F6E4;
+  --punch-shadow-panel: 0 4px 24px rgba(0,0,0,0.06);
+  --punch-shadow-mic: 0 4px 20px rgba(20,184,166,0.45);
+  --punch-shadow-header: 0 1px 0 #E5E5E5, 0 4px 20px rgba(0,0,0,0.03);
+
+  /* Spacing — 8px grid */
+  --punch-space-1: 8px;
+  --punch-space-2: 16px;
+  --punch-space-3: 24px;
+  --punch-space-4: 32px;
+  --punch-space-5: 40px;
+  --punch-space-6: 48px;
+  --punch-space-7: 56px;
+  --punch-space-8: 64px;
+  --punch-page-padding-x: 56px;
+
+  --punch-ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Motion — all keyframes global ─────────────────────────────────── */
+
+@keyframes floatDrift {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(30px, -20px) scale(1.08); }
+  66%  { transform: translate(-20px, 25px) scale(0.96); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes pulseRing {
+  0%   { transform: scale(1);   opacity: 0.55; }
+  70%  { transform: scale(1.9); opacity: 0; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1;   box-shadow: 0 0 0 0 rgba(20,184,166,0.5); }
+  50%      { opacity: 0.6; box-shadow: 0 0 0 6px rgba(20,184,166,0); }
+}
+
+@keyframes chipStagger {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes typingDot {
+  0%, 60%, 100% { transform: translateY(0);   opacity: 0.4; }
+  30%           { transform: translateY(-5px); opacity: 1; }
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
+
+@keyframes sparkleTwinkle {
+  0%, 100% { transform: scale(1) rotate(0deg);   opacity: 1; }
+  50%      { transform: scale(1.18) rotate(8deg); opacity: 0.8; }
+}
+
+@keyframes iconWiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25%      { transform: rotate(-8deg); }
+  75%      { transform: rotate(8deg); }
+}
+
+@keyframes slideUpIn {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes slideDownOut {
+  from { transform: translateY(0); }
+  to   { transform: translateY(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; }
+}

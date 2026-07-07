@@ -1,0 +1,50 @@
+@import './tokens.css';
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #0A0A0A;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#root {
+  height: 100%;
+}
+
+button, input {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::-webkit-scrollbar { width: 0; height: 0; }
+
+#punch-stage {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #0A0A0A;
+}
+
+#punch-frame {
+  width: 1080px;
+  height: 1920px;
+  flex: none; /* flex items default to shrink-to-fit; that fought the JS scale() below */
+  position: relative;
+  transform-origin: center center;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+  background: #FFFFFF;
+  overflow: hidden;
+}
+
+.punch-layer {
+  position: absolute;
+  inset: 0;
+}
