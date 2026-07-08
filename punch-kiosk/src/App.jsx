@@ -7,6 +7,8 @@ import { AboutPanel } from './features/detail/panels/AboutPanel.jsx';
 import { EventsPanel } from './features/detail/panels/EventsPanel.jsx';
 import { AdmissionsPanel } from './features/detail/panels/AdmissionsPanel.jsx';
 import { useKioskScale } from './hooks/useKioskScale.js';
+import { usePerformanceMode, flags } from './hooks/usePerformanceMode.js';
+import { FpsCounter } from './components/debug/FpsCounter.jsx';
 
 const PANELS = {
   academics: AcademicsPanel,
@@ -22,6 +24,9 @@ const IDLE_RESET_MS = 180000;
 
 export function App() {
   const frameRef = useKioskScale();
+  // ?lowPower=true, or a failed frame-time self-benchmark, swaps the
+  // Atmosphere blur layers for a static wash (Pi 5 GPU headroom).
+  const lowPower = usePerformanceMode();
   const [view, setView] = React.useState('home'); // 'home' | 'chat' | panel key
   const [pendingQuery, setPendingQuery] = React.useState('');
   // Overlay being dismissed — kept mounted (same element, no remount) while
@@ -77,7 +82,7 @@ export function App() {
     <div id="punch-stage">
       <div id="punch-frame" ref={frameRef}>
         <div className="punch-layer" style={{ zIndex: 1 }}>
-          <HomeFrame key={homeEpoch} onOpenPanel={openPanel} onOpenChat={openChat} />
+          <HomeFrame key={homeEpoch} onOpenPanel={openPanel} onOpenChat={openChat} lowPower={lowPower} />
         </div>
 
         {overlayKey && (
@@ -96,6 +101,8 @@ export function App() {
               : OverlayPanel && <OverlayPanel onBack={goHome} onAskPunch={openChat} />}
           </div>
         )}
+
+        {flags.debug && <FpsCounter lowPower={lowPower} lowPowerForced={flags.lowPowerForced} />}
       </div>
     </div>
   );

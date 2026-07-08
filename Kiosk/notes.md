@@ -74,3 +74,83 @@ HR/leave) added.
 8. (L) Consider bumping InfoCard detail text 14→15px for standing distance.
 9. (L) MessageBubble uses array index as key (fine while append-only).
 10. (L) SUGGESTED_QUESTIONS could rotate/randomize for variety.
+
+## 2026-07-08 — Atmosphere blur performance: proxy profile + low-power fallback
+
+### 1. Proxy signal (NOT verified on real Pi 5 hardware)
+
+Method: built kiosk page profiled in headless Chromium (software/SwiftShader
+rendering) at 1080×1920 with CDP CPU throttling at 4x and 6x, comparing the
+default 5-blur-layer Atmosphere vs the new `?lowPower=true` static fallback.
+rAF frame-time sampling (4s idle Home + 800ms windows around panel
+open/close) plus renderer trace category sums.
+
+Results (frame times in ms):
+
+| Scenario                | mean | p95  | max  | % frames >16.7ms |
+|-------------------------|------|------|------|------------------|
+| 4x idle, default        | 19.3 | 33.3 | 333  | 22%              |
+| 4x idle, lowPower       | 17.5 | 16.8 | 50   | 21%              |
+| 6x idle, default        | 27.0 | 33.4 | 400  | 44%              |
+| 6x idle, lowPower       | 19.7 | 33.4 | 67   | 37%              |
+
+Panel-open transition: at 6x default the 0.42s slide produced only 4 frames
+in 800ms (median 317ms — a slideshow); lowPower produced 12 frames
+(median 16.7ms). At 4x: 6 frames default vs 15 lowPower. The fallback
+consistently collapses worst-case frame times by 5-8x.
+
+Attribution caveats (why this is a proxy, not a verdict):
+- Blur compositing happens in Chromium's GPU/viz process, which page-level
+  tracing does not capture — renderer-side Paint/Commit sums were similar in
+  both modes (~1.3-1.6s busy per 4s). The A/B frame-time difference is the
+  meaningful signal, and it points squarely at the blur layers.
+- Headless SwiftShader rasterizes blur on CPU; the Pi 5's VideoCore VII GPU
+  behaves differently (possibly better at compositing, possibly worse on
+  five 520-700px blur radius-60 layers). Real numbers require the device.
+- Side observation: `dotPulse` animates box-shadow (repaints every frame
+  even in lowPower) — added to follow-ups.
+
+### 2. Fallback mechanism added
+
+- `src/hooks/usePerformanceMode.js` (new): reads `?lowPower=true|false`
+  (true forces the fallback, false pins the full effect and disables the
+  auto-switch — needed for clean A/B); otherwise runs a one-shot
+  self-benchmark 1.5s after mount (60 rAF frames; median >24ms ≈ can't hold
+  ~42fps → switches to low power, logged to console).
+- `src/features/home/Atmosphere.jsx`: `lowPower` prop swaps the 5 animated
+  60px-blur layers for a single static two-stop radial-gradient wash — no
+  filter, no animation, painted once. Same turquoise mood; full effect
+  remains the default (guardrail 2: animation must never slow the visitor).
+- `src/components/debug/FpsCounter.jsx` (new): `?debug=true` overlay —
+  FPS / avg / max frame time, color-coded, plus a LOW POWER (URL|AUTO) badge.
+- `src/App.jsx`, `HomeFrame.jsx`: wire lowPower + debug overlay through.
+
+### 3. Manual test steps on the actual Pi 5
+
+1. Boot the Pi with the kiosk build served, open Chromium at
+   `http://<kiosk-url>/?debug=true&lowPower=false` (full effect pinned,
+   FPS counter on, auto-switch off so you measure the true default).
+2. Let Home idle 60s. Read the counter: green (avg ≤17ms) = fine; amber
+   (17-34ms) = borderline; red (>34ms) or max spikes repeatedly >50ms = the
+   blur layers are a real problem on this hardware.
+3. Tap through 5-6 panel opens/closes and the chat. Watch `max` during the
+   slide transitions — repeated 100ms+ maxima mean visitors see stutter.
+4. Change the URL to `?debug=true&lowPower=true` and repeat steps 2-3 with
+   the same interactions. Compare readings side by side.
+5. Auto-switch check: load with only `?debug=true`. If the self-benchmark
+   trips, a "LOW POWER (AUTO)" badge appears within ~5s of load and the
+   console logs `[punch] self-benchmark: ...`.
+6. Optional DevTools view: Ctrl+Shift+I → Performance → gear icon → no CPU
+   throttling (you're on real hardware) → Record 10s of idle + a panel
+   open → look at the frame chart (red striped = dropped frames) and the
+   GPU/Raster tracks while the blobs drift.
+7. Decision: if default is red/amber and lowPower is green, either ship the
+   kiosk launch URL with `lowPower=true` or simply trust the auto-benchmark
+   (it makes the same call on every boot).
+
+### Follow-ups added
+
+11. (M) `dotPulse` keyframe animates box-shadow → per-frame repaint even in
+    low-power mode; switch to a transform/opacity pulse.
+12. (L) Consider `will-change: transform` on Atmosphere blobs (full mode) if
+    Pi testing shows raster churn rather than composite cost.

@@ -4,9 +4,28 @@ import React from 'react';
  * Atmosphere — soft turquoise light drifting across the whole Home screen,
  * behind every zone. Replaces hard boxed separation with a continuous wash
  * (per the brand's "premium airport self-service" visual target).
+ *
+ * `lowPower` swaps the 5 animated 60px-blur layers for a single static
+ * radial-gradient wash: no blur filter, no animation, painted once. Same
+ * turquoise mood, near-zero GPU cost — for hardware (Pi 5) where the full
+ * effect can't hold 60fps. Activated by ?lowPower=true or the self-benchmark
+ * in usePerformanceMode; the full effect stays the default everywhere else.
  */
-export function Atmosphere({ intensity = 55, motion = true }) {
+export function Atmosphere({ intensity = 55, motion = true, lowPower = false }) {
   const k = Math.max(0, Math.min(1, intensity / 100));
+
+  if (lowPower) {
+    return (
+      <div style={{
+        position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0,
+        background: [
+          `radial-gradient(1100px at 18% 22%, rgba(45,212,191,${(0.11 * k).toFixed(3)}), transparent 70%)`,
+          `radial-gradient(1000px at 82% 70%, rgba(20,184,166,${(0.10 * k).toFixed(3)}), transparent 70%)`,
+        ].join(', '),
+      }} />
+    );
+  }
+
   const drift = (dur, delay) => (motion
     ? { animation: `floatDrift ${dur}s ease-in-out infinite`, animationDelay: `${delay}s` }
     : {});

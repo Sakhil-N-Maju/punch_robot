@@ -12,7 +12,7 @@ import { useClock } from '../../hooks/useClock.js';
  * HomeFrame — Frame A. The default kiosk state: 5 stacked zones filling
  * 1080x1920 (192 + 340 + 660 + 536 + 192).
  */
-export function HomeFrame({ onOpenPanel, onOpenChat }) {
+export function HomeFrame({ onOpenPanel, onOpenChat, lowPower = false }) {
   // Live clock (minute ticks) — a kiosk booted in the morning must not still
   // say "Good Morning" in the evening, so `now` can't be frozen at mount.
   const { now } = useClock();
@@ -32,7 +32,7 @@ export function HomeFrame({ onOpenPanel, onOpenChat }) {
       width: 1080, height: 1920, background: '#FFFFFF', display: 'flex', flexDirection: 'column',
       overflow: 'hidden', fontFamily: "'Plus Jakarta Sans', sans-serif", position: 'relative',
     }}>
-      <Atmosphere intensity={55} motion />
+      <Atmosphere intensity={55} motion lowPower={lowPower} />
       <Header />
       <Greeting onOpenPanel={onOpenPanel} now={now} />
       <QuickAccess onOpenPanel={onOpenPanel} />
