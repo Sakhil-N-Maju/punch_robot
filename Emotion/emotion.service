@@ -1,0 +1,24 @@
+# systemd unit for the face-detection/greeting-trigger service (AXON).
+# Install: sudo cp emotion.service /etc/systemd/system/ && sudo systemctl enable --now emotion
+[Unit]
+Description=PUNCH face-detection / greeting-trigger service (on-device, labels only)
+After=network-online.target
+
+[Service]
+Type=simple
+User=punch
+WorkingDirectory=/opt/punch/Emotion
+ExecStart=/opt/punch/venv/bin/python3 emotion_service.py
+Restart=on-failure
+RestartSec=3
+# /run/punch for the tmpfs state file (RAM-backed, gone on reboot)
+RuntimeDirectory=punch
+# privacy hardening: no home access, read-only OS, private /tmp
+ProtectHome=yes
+ProtectSystem=strict
+ReadWritePaths=/run/punch
+PrivateTmp=yes
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target

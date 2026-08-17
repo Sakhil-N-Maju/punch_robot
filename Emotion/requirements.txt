@@ -1,0 +1,13 @@
+# On AXON, install per Vicharak's AXON SDK/OS image docs (exact package
+# names/versions TBD until the board's software setup is finalized —
+# flag if this needs revisiting once that happens):
+#   RKNN NPU runtime: rknn-toolkit-lite2, matched to AXON's OS/Python/NPU
+#   driver version. Get it from Vicharak's AXON SDK release or
+#   https://github.com/airockchip/rknn-toolkit2 (rknn_toolkit_lite2/).
+#   Camera (until CSI vs. USB is settled, see Architecture/ARCHITECTURE.md
+#   §8): python3-opencv (apt) or opencv-python (pip) for V4L2 capture.
+#
+# pip installs (venv with --system-site-packages so apt packages are visible):
+numpy>=1.24
+pyzmq>=25
+opencv-python>=4.8
