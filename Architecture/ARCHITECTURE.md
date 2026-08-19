@@ -1,6 +1,6 @@
 # ARCHITECTURE.md — Punch Robot, single-source-of-truth
 
-Last updated: 2026-08-17. This file is the canonical reference for what's
+Last updated: 2026-08-19. This file is the canonical reference for what's
 actually decided vs. still open. When in doubt about current project state,
 check here first, then the per-subfolder `notes.md` files for history/detail.
 
@@ -40,15 +40,16 @@ the permanent, official name.
 | Board | Qty | Status | Role |
 |---|---|---|---|
 | AXON AI-Edge Computer (Vicharak) | 1 | **Purchased — ₹20,000** | Primary board. 8GB RAM / 32GB storage, 6 TOPS NPU, octa-core CPU, triple HDMI, dual MIPI-CSI. Being tested to see if it alone can run face detection + response, the Kiosk UI, Speech, and the face LCD together. |
-| Raspberry Pi 5 (8GB) | 2 | Approved, Phase 1 | Held in reserve. Role undecided — depends entirely on the navigation hardware decision below. |
+| ShrikeFi (ESP32S3 + 1KLUT FPGA) | 1 | **Purchased — ₹1,000** | Movement-control board. Runs real-time motor control/safety for the differential-drive base — see below. |
+| Raspberry Pi 5 (8GB) | 2 | Approved, Phase 1 | Held in reserve. Role still undecided — AXON (perception/UI) and ShrikeFi (movement control) now cover the two previously-open compute roles, so a Pi 5 role is less likely than before, but not ruled out. |
 | ~~Raspberry Pi AI HAT+~~ | ~~1~~ | **Dropped — not purchased** | AXON's built-in NPU covers this job, so the AI HAT+ that Phase 1 originally budgeted for is no longer needed. Saves ~₹9,000 against the budget as long as it's confirmed unbought (see Budget/ledger.md). |
 
-**Navigation/movement hardware is UNDECIDED.** Do not assume ESP32, a Pi 5,
-or any other board for real-time motor control/safety — this is being
-decided after consulting an external expert already advising the project.
-AXON is being tried first to see if it can handle navigation too; if not,
-the fallback (ESP32 / a spare Pi 5 / other) gets planned separately. Nothing
-in this document assumes a specific outcome.
+**Navigation/movement hardware is DECIDED: ShrikeFi (ESP32S3 + FPGA).**
+Resolved 2026-08-16 when the drive motors, motor drivers, and ShrikeFi were
+purchased together (Budget/ledger.md); confirmed by Emo 2026-08-19. AXON
+still handles perception (face detection, marker/beacon detection); ShrikeFi
+handles real-time motor control/safety. The exact AXON↔ShrikeFi command
+interface isn't designed yet — see Navigation/notes.md and §4/§8.
 
 ## 4. Data Flow
 
@@ -68,9 +69,9 @@ Camera (CSI or USB — undecided, §8)
           │                               │
           ▼                               ▼
   face_detected/position          movement command
-  signal, LAN (ZMQ)               → NAVIGATION BOARD — UNDECIDED
-          │                         (AXON itself, or the fallback
-    ┌─────┴──────┐                  board once §8 is resolved)
+  signal, LAN (ZMQ)               → ShrikeFi (ESP32S3+FPGA) — DECIDED
+          │                         → drives motors via 2x BTS7960
+    ┌─────┴──────┐                  H-bridge drivers (Navigation/)
     ▼            ▼
  Animation/    Kiosk/
  (face LCD    (greeting/tone
@@ -80,10 +81,11 @@ Camera (CSI or USB — undecided, §8)
 ```
 
 Decided: camera → AXON → face detection (RKNN) and marker detection both run
-on AXON. Not yet built: Animation/ and Kiosk/ don't yet consume the face
-signal (Emotion/ publishes it; nothing subscribes yet). Undecided: which
-board executes movement commands, and by extension whether that command
-path even leaves AXON.
+on AXON; beacon position estimates → movement commands → ShrikeFi → the two
+drive motors via BTS7960 drivers. Not yet built/designed: Animation/ and
+Kiosk/ don't yet consume the face signal (Emotion/ publishes it; nothing
+subscribes yet), and the AXON↔ShrikeFi command interface (serial/USB/
+network) hasn't been designed — see Navigation/notes.md.
 
 ## 5. Software Stack
 
@@ -113,24 +115,26 @@ changed.
 - `Animation/` — face-LCD expression/animation logic. Not yet started (scaffold only).
 - `Emotion/` — camera-driven face detection + greeting-trigger service, runs on AXON.
 - `Speech/` — Vosk STT + Piper TTS voice pipeline, designed but not yet implemented.
-- `Navigation/` — beacon-based localization + movement control. Barely started; blocked on the navigation-hardware decision (§3, §8).
+- `Navigation/` — beacon-based localization + movement control (ShrikeFi ESP32S3+FPGA board). Hardware decided and first parts purchased; AXON↔ShrikeFi command interface not yet designed.
 - `Other/` — catch-all for anything that doesn't fit the above. Not yet started (scaffold only).
 - `Architecture/` — this file: the cross-cutting, single-source-of-truth reference.
 - `punch-kiosk/` — the actual React app backing `Kiosk/`.
 
 ## 7. Budget Snapshot
 
-Total budget ₹1,30,000. Spent so far: ₹21,999 (AXON board ₹20,000 + Claude
-subscription ₹1,999). Remaining: ₹1,08,001. Full itemized ledger, running
-totals, and any future purchases: `Budget/ledger.md` — that file is the
-source of truth; this is a snapshot only and will drift out of date.
+Total budget ₹1,30,000. Spent so far: ₹28,019.06 (AXON board ₹20,000 +
+Claude subscription ₹1,999 + drive motors/BTS7960 drivers/wiring/ShrikeFi
+₹6,020.06). Remaining: ₹1,01,980.94. Full itemized ledger, running totals,
+and any future purchases: `Budget/ledger.md` — that file is the source of
+truth; this is a snapshot only and will drift out of date.
 
 ## 8. Open Decisions
 
-1. **Navigation/movement hardware** — undecided pending AXON testing and an
-   external expert consultation. Candidates on the table: AXON handling it
-   directly, ESP32, or a spare Pi 5. Blocks: final role of the 2x reserve
-   Pi 5 units, the Navigation/ movement-command path in §4.
+1. ~~Navigation/movement hardware~~ — **DECIDED 2026-08-16: ShrikeFi
+   (ESP32S3 + FPGA)**, see §3. Remaining sub-items, not full open decisions:
+   the AXON↔ShrikeFi command interface isn't designed yet, and several
+   Mobility & Drive parts (driven wheels, casters, battery pack, battery
+   management module) are still unpurchased — see Navigation/notes.md.
 2. **AXON power input spec** — needs the datasheet or a direct question to
    Vicharak before assuming it matches the existing buck-converter/battery
    plan. Not yet verified.
@@ -140,9 +144,10 @@ source of truth; this is a snapshot only and will drift out of date.
    `Emotion/capture.py`'s current implementation targets USB (OpenCV/V4L2)
    as the safe default — CSI support depends on whatever camera SDK Vicharak
    ships for AXON, not evaluated yet.
-4. **Whether both Raspberry Pi 5 units get used at all** — depends entirely
-   on #1. If AXON handles everything including navigation, both Pi 5s may
-   end up unused.
+4. **Whether either Raspberry Pi 5 unit gets used at all** — now that #1 is
+   decided (AXON = perception/UI, ShrikeFi = movement control), both roles
+   a Pi 5 might have filled are covered. A Pi 5 role isn't ruled out, but
+   there's no clear task left for one unless something else comes up.
 
 ---
 
